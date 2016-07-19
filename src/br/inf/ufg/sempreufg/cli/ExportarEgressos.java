@@ -1,12 +1,13 @@
 package br.inf.ufg.sempreufg.cli;
 
+import br.inf.ufg.sempreufg.conexao.Conexao;
+
 public class ExportarEgressos {
+
+    private static Conexao conexao = new Conexao();
+
     public static void main(String[] args) {
-        //Verifica se onde quer salvar está com caminho correto
-
-        // Pega o BD e vai lendo cada uma das operações
-
-        // Escreve os resultados no arquivo.
+        System.out.println("teste");
 
     }
 }
