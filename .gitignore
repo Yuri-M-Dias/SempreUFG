@@ -1,6 +1,10 @@
-.idea/
-*.class
-*.jar
 *.war
 *.ear
 *.log
+*.class
+*.jar
+*.txt
+arquivo/
+.idea/
+target/
+SempreUFG.iml
