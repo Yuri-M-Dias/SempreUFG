@@ -7,4 +7,4 @@
 arquivo/
 .idea/
 target/
-SempreUFG.iml
+*.iml
