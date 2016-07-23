@@ -1,16 +1,21 @@
 package br.inf.ufg.sempreufg.cli;
 
+import br.inf.ufg.sempreufg.auxiliar.ArquivoParaImportar;
+import br.inf.ufg.sempreufg.conexao.Conexao;
+
+import java.util.List;
+
 public class ImportarEgressos {
+
+    private static Conexao conexao = null;
+    private static ArquivoParaImportar arquivoParaImportar = null;
+
     public static void main(String[] args) {
-        // Procura e lê o arquivo passado no args
-
-        // Verifica se o formato está de acordo e começa a trazudir o texto
-        // para objetos em java, ou similares.
-
-        // Depois de checar pela validade de TODO o arquivo, começa a salvar
-        // no banco.
-
-        //Salva no banco, informa sucesso.
-
+        conexao = new Conexao();
+        arquivoParaImportar = new ArquivoParaImportar();
+        List<String> arquivo = ArquivoParaImportar.GetArquivoParaImportar();
+        for (String string: arquivo) {
+            conexao.recordBD(string);
+        }
     }
 }
