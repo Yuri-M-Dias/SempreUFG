@@ -70,8 +70,6 @@ VALUES (1, 1, 'Ciências Contábeis', 'Bachalerado', '2016-07-24', True, 'Integr
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
 VALUES (1, 1, 'Ciências da Saúde (M/D)', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 1, 'Ciências da Saúde (M/D)', 'Bachalerado', '2016-07-24', True, 'Integral');
-INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
 VALUES (1, 1, 'Ciências Farmacêuticas (M/D)', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
 VALUES (1, 1, 'Comunicação', 'Bachalerado', '2016-07-24', True, 'Integral');
@@ -120,37 +118,37 @@ VALUES (1, 1, 'PROFIAP (MP)', 'Bachalerado', '2016-07-24', True, 'Integral');
 
 --REGIONAL CATALÃO--
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'Ciências Exatas e Tecnológicas (D)', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'Ciências Exatas e Tecnológicas (D)', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'Estudos da Linguagem', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'Estudos da Linguagem', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'Educação', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'Educação', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'Ensino de Física', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'Ensino de Física', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'Geografia', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'Geografia', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'Gestão Organizacional (profissional)', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'Gestão Organizacional (profissional)', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'História (profissional)', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'História (profissional)', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'Matemática (PROFMAT - profissional)', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'Matemática (PROFMAT - profissional)', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'Modelagem e Otimização', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'Modelagem e Otimização', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 2, 'Química', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (2, 1, 'Química', 'Bachalerado', '2016-07-24', True, 'Integral');
 
 --REGIONAL JATAÍ--
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 3, 'Agronomia', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (3, 1, 'Agronomia', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 3, 'Biociência Animal', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (3, 1, 'Biociência Animal', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 3, 'Ciências Aplicadas a Saúde', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (3, 1, 'Ciências Aplicadas a Saúde', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 3, 'Educação', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (3, 1, 'Educação', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 3, 'Geografia (M/D)', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (3, 1, 'Geografia (M/D)', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
-VALUES (1, 3, 'Matemática (PROFMAT - Profissional)', 'Bachalerado', '2016-07-24', True, 'Integral');
+VALUES (3, 1, 'Matemática (PROFMAT - Profissional)', 'Bachalerado', '2016-07-24', True, 'Integral');
 

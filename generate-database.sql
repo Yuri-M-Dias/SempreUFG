@@ -85,11 +85,12 @@ CREATE TABLE CURSO_UFG
   CUFG_ID 				bigserial 		PRIMARY KEY,
   UAFG_ID		integer REFERENCES UNIDADE_ACADEMICA_UFG NOT NULL,
   ARCO_ID		integer	REFERENCES AREA_CONHECIMENTO NOT NULL,
-  CUFG_NOME 			varchar(500)		UNIQUE NOT NULL,
+  CUFG_NOME 			varchar(500)		NOT NULL,
   CUFG_NIVEL 			t_nivel_curso		NOT NULL,
   CUFG_DATA_CRIACAO 		date			NOT NULL,
   CUFG_PRESENCIAL 		boolean 		NOT NULL,
-  CURS_TURNO 			t_turno		NOT NULL
+  CURS_TURNO 			t_turno		NOT NULL,
+  UNIQUE(CUFG_NOME, UAFG_ID)
 );
 
 CREATE TABLE CURSO_OUTRA_IES
@@ -301,22 +302,19 @@ INSERT INTO public.unidade_academica_ufg(
 VALUES (3, 'Catalão', 'Faculdade de Hitória');
 
 INSERT INTO public.curso_ufg(
-    cufg_id, uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao,
+    uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao,
     cufg_presencial, curs_turno)
-VALUES (1, 1, 3, 'Medicina', 'Bachalerado', '01/04/1960',
-    True, 'Integral');
+VALUES (1, 3, 'Medicina', 'Bachalerado', '01/04/1960', True, 'Integral');
 
 INSERT INTO public.curso_ufg(
-    cufg_id, uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao,
+    uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao,
     cufg_presencial, curs_turno)
-VALUES (2, 3, 4, 'Engenharia da Computação', 'Mestrado', '15/12/1958',
-    True, 'Integral');
+VALUES (3, 4, 'Engenharia da Computação', 'Mestrado', '15/12/1958', True, 'Integral');
 
 INSERT INTO public.curso_ufg(
-    cufg_id, uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao,
+    uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao,
     cufg_presencial, curs_turno)
-VALUES (3, 3, 5, 'História', 'Mestrado', '05/06/1982',
-    True, 'Matutino');
+VALUES (3, 5, 'História', 'Mestrado', '05/06/1982', True, 'Matutino');
 
 INSERT INTO public.historico_em_iem(
     hiem_id, egre_id, loge_id, hiem_mes_ano_inicio, hiem_mes_ano_fim)

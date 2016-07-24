@@ -8,4 +8,4 @@ export PGUSER='usuario'
 export PGPASSWORD='senha'
 
 psql -h 127.0.0.1 < generate-database.sql
-psql -h 127.0.0.1 -e < inserir-cursos.sql
+psql -h 127.0.0.1 < inserir-cursos.sql
