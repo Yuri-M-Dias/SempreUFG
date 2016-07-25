@@ -1,13 +1,10 @@
 package br.inf.ufg.sempreufg.auxiliar;
 
 import br.inf.ufg.sempreufg.model.CursoUFG;
-import com.google.gson.Gson;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
+
+//import com.google.gson.Gson;
 
 public class ArquivoParaExportar {
 
@@ -56,8 +53,8 @@ public class ArquivoParaExportar {
                 System.out.println(curs_turno);
                 System.out.println("");
                 CursoUFG curso = new CursoUFG(cufg_id, uafg_id, arco_id, cufg_nome, cufg_nivel, curs_turno, cufg_presencial, cufg_data_criacao);
-                Gson gson = new Gson();
-                json = gson.toJson(curso);
+                //Gson gson = new Gson();
+                //json = gson.toJson(curso);
                 System.out.println(json);
             }
         }

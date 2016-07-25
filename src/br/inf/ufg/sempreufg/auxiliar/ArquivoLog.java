@@ -1,6 +1,8 @@
 package br.inf.ufg.sempreufg.auxiliar;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Classe que manipula os registros de Log da aplicação.

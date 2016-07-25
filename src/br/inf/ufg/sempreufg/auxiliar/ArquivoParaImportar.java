@@ -15,12 +15,13 @@ public class ArquivoParaImportar {
     public ArquivoParaImportar(String caminhoArquivo) {
         BufferedReader bufferedReader = readFileTXT(caminhoArquivo);
         if (bufferedReader == null) {
-            throw new IllegalArgumentException("Erro!");
+            arquivoLog.GravaMensagemDeErro("Erro na abertura do arquivo de Log.");
         }
         try {
             String line = bufferedReader.readLine();
             while (line != null) {
-                ArquivoLog.GravaMensagemDeErro(line);
+                arquivo.add(line);
+                line = bufferedReader.readLine();
                 try {
                     arquivo.add(line);
                 } catch (NullPointerException e) {

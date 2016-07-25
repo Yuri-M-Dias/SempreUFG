@@ -1,5 +1,6 @@
 package br.inf.ufg.sempreufg.cli;
 
+import br.inf.ufg.sempreufg.auxiliar.ArquivoLog;
 import br.inf.ufg.sempreufg.auxiliar.ArquivoParaImportar;
 import br.inf.ufg.sempreufg.conexao.Conexao;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -20,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 public class ImportarEgressos {
 
     private static ArquivoParaImportar arquivoParaImportar = null;
+    private static ArquivoLog arquivoLog = null;
     private static Connection conexaoSQL = null;
 
     public static void main(String[] args) {
@@ -27,13 +29,14 @@ public class ImportarEgressos {
         if (args.length > 0) {
             caminho = args[0];
         }
+        arquivoLog = new ArquivoLog();
         Conexao conexao = new Conexao();
-        arquivoParaImportar = new ArquivoParaImportar(caminho);
+        arquivoParaImportar = new ArquivoParaImportar(args[0]);
         List<String> arquivo = ArquivoParaImportar.GetArquivoParaImportar();
         conexaoSQL = conexao.getConexao();
         if (conexaoSQL == null) {
-            throw new IllegalArgumentException("Problema ao conseguir a conexão com " +
-                    "o BD.");
+            arquivoLog.GravaMensagemDeErro("Problema ao conseguir a" +
+                    "conexão com o BD.");
         }
         try {
             conexaoSQL.setAutoCommit(false);
@@ -43,7 +46,8 @@ public class ImportarEgressos {
                 } else if (registro.startsWith("Reg.2")) {
                     inserirReg2(registro);
                 } else {
-                    throw new IllegalArgumentException("Arquivo com formato errado.");
+                    arquivoLog.GravaMensagemDeErro("Arquivo com formato" +
+                            "errado.");
                 }
             }
             conexaoSQL.commit();
@@ -51,14 +55,14 @@ public class ImportarEgressos {
             try {
                 conexaoSQL.rollback();
             } catch (SQLException e1) {
-                e1.printStackTrace();
+                arquivoLog.GravaMensagemDeErro(e1.getMessage());
             }
-            e.printStackTrace();
+            arquivoLog.GravaMensagemDeErro(e.getMessage());
         } finally {
             try {
                 conexaoSQL.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                arquivoLog.GravaMensagemDeErro(e.getMessage());
             }
         }
     }
@@ -83,6 +87,8 @@ public class ImportarEgressos {
             java.sql.Date dateSQL = convertStringToSQLDate(dataNascimento);
             preparedStatement.setDate(4, dateSQL);
             preparedStatement.executeUpdate();
+        } catch (ParseException e) {
+            arquivoLog.GravaMensagemDeErro(e.getMessage());
         }
         //Pega o id do curso da UFG...
         String nomeCursoUFG = listaCampos.get(4);
@@ -108,7 +114,7 @@ public class ImportarEgressos {
             egressoId = resultSet.getString(1);
         }
         if (egressoId == null) {
-            throw new SecurityException("Falha ao inserir egresso.");
+            arquivoLog.GravaMensagemDeErro("Falha ao inserir egresso.");
         }
         String mesAnoInicio = listaCampos.get(5);
         String mesAnoFim = listaCampos.get(6);
