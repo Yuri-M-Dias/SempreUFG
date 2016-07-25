@@ -3,13 +3,13 @@ package br.inf.ufg.sempreufg.auxiliar;
 /**
  * Utilizadas para strings fixas da aplicação.
  */
-public class Parametros {
+public class Strings {
     public static final String enderecoPostgres =
-            "jdbc:postgresql://localhost:5432/teste";
+            "jdbc:postgresql://localhost:5432/SempreUFG";
 
-    public static final String nomeLoginPostgres = "usuario";
+    public static final String nomeLoginPostgres = "postgres";
 
-    public static final String senhaLoginPostgres = "senha";
+    public static final String senhaLoginPostgres = "postgres";
 
     public static final String nomeClassDriverConexaoPostgres =
             "org.postgresql.Driver";

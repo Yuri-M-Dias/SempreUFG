@@ -1,0 +1,1 @@
+{"cufg_id":"15","uafg_id":"1","arco_id":"1","cufg_nome":"Filosofia (M/D)","cufg_nivel":"Bachalerado","curs_turno":"Integral","cufg_presencial":true,"cufg_data_criacao":"jul 24, 2016"}

@@ -1,7 +1,7 @@
 package br.inf.ufg.sempreufg.conexao;
 
 import br.inf.ufg.sempreufg.auxiliar.ArquivoLog;
-import br.inf.ufg.sempreufg.auxiliar.Parametros;
+import br.inf.ufg.sempreufg.auxiliar.Strings;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,6 +16,7 @@ public class Conexao {
     private static PreparedStatement preparedStatement;
     private static Connection conexao = null;
     private static ArquivoLog arquivoLog = new ArquivoLog();
+    private static Strings strings = new Strings();
 
     /**
      * Inicia uma conexão com o banco de dados
@@ -23,31 +24,42 @@ public class Conexao {
     public Conexao() {
         if (conexao == null) {
             try {
-                Class.forName(Parametros.nomeClassDriverConexaoPostgres);
+                Class.forName(strings.nomeClassDriverConexaoPostgres);
                 conexao = DriverManager.getConnection("" +
-                                Parametros.enderecoPostgres,
-                        Parametros.nomeLoginPostgres,
-                        Parametros.senhaLoginPostgres);
+                        strings.enderecoPostgres,
+                        strings.nomeLoginPostgres,
+                        strings.senhaLoginPostgres);
             } catch (ClassNotFoundException e) {
-                ArquivoLog.GravaMensagemDeErro(e.getMessage());
+                arquivoLog.GravaMensagemDeErro(e.getMessage());
             } catch (SQLException e) {
-                ArquivoLog.GravaMensagemDeErro(e.getMessage());
+                arquivoLog.GravaMensagemDeErro(e.getMessage());
             }
+        }
+        createConnection();
+    }
+
+    private static void createConnection() {
+        try {
+            preparedStatement =  conexao.prepareStatement(
+                    "INSERT INTO public.area_conhecimento(" +
+                            "arco_arc_id, arco_nome_area, arco_codigo_area)" +
+                            "VALUES (?, ?, ?);");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public Connection getConexao() {
-        return conexao;
-    }
 
     public static void recordBD(String recordAreaConhecimento) {
         String enter = recordAreaConhecimento;
-        enter = enter.substring(6, enter.length());
-        String[] parameters = enter.split(";", numberOfFields(enter));
+        enter = enter.substring(6,enter.length());
+        String[] parameters = enter.split(";",numberOfFields(enter));
+
         try {
-            preparedStatement.setInt(1, Integer.parseInt(parameters[0]));
-            preparedStatement.setString(2, parameters[1]);
-            preparedStatement.setInt(3, Integer.parseInt(parameters[2]));
+            createConnection();
+            preparedStatement.setInt(1,Integer.parseInt(parameters[0]));
+            preparedStatement.setString(2,parameters[1]);
+            preparedStatement.setInt(3,Integer.parseInt(parameters[2]));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -63,5 +75,4 @@ public class Conexao {
         }
         return count;
     }
-
 }
