@@ -34,31 +34,17 @@ public class Conexao {
                 ArquivoLog.GravaMensagemDeErro(e.getMessage());
             }
         }
-        createConnection();
     }
 
     public Connection getConexao() {
         return conexao;
     }
 
-    private static void createConnection() {
-        try {
-            preparedStatement = conexao.prepareStatement(
-                    "INSERT INTO public.area_conhecimento(" +
-                            "arco_arc_id, arco_nome_area, arco_codigo_area)" +
-                            "VALUES (?, ?, ?);");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public static void recordBD(String recordAreaConhecimento) {
         String enter = recordAreaConhecimento;
         enter = enter.substring(6, enter.length());
         String[] parameters = enter.split(";", numberOfFields(enter));
-
         try {
-            createConnection();
             preparedStatement.setInt(1, Integer.parseInt(parameters[0]));
             preparedStatement.setString(2, parameters[1]);
             preparedStatement.setInt(3, Integer.parseInt(parameters[2]));
