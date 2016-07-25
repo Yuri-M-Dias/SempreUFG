@@ -132,9 +132,6 @@ public class ImportarEgressos {
             }
             cursoID = resultSet.getLong("cufg_id");
         }
-        if (cursoID == null) {
-            ArquivoLog.GravaMensagemDeErro("Curso não existe no BD!");
-        }
         String mesAnoInicio = listaCampos.get(5);
         String mesAnoFim = listaCampos.get(6);
         String numeroMatriculaCurso = listaCampos.get(7);
@@ -176,9 +173,6 @@ public class ImportarEgressos {
             }
             egressoId = resultSet.getLong("egre_id");
         }
-        if (egressoId == null) {
-            throw new SecurityException("Falha ao encontrar egresso.");
-        }
         String nomeCursoUFG = listaCampos.get(2);
         String procuraCursoUFGSQL = "SELECT cufg_id FROM public.curso_ufg " +
                 "WHERE cufg_nome = ?";
@@ -205,10 +199,6 @@ public class ImportarEgressos {
                 throw new SQLException("Egresso não cursou este curso: " + nomeCursoUFG);
             }
             historicoId = resultSet.getLong("hifg_id");
-        }
-        if (historicoId == null) {
-            throw new SecurityException("Esse egresso não cursou este curso " +
-                    "na UFG!");
         }
         String tipoRealizacao = listaCampos.get(3);
         String dataInicio = listaCampos.get(4);
@@ -253,7 +243,7 @@ public class ImportarEgressos {
             validacao = false;
         }
         String numeroDocumento = registro1.get(2);
-        if (!isCharacterOnly(numeroDocumento)) {
+        if (!isAlphanumeric(numeroDocumento)) {
             ArquivoLog.GravaMensagemDeErro("Campo de numero do documento " +
                     "deve ter apenas letras e espaços sem caracteres especiais: " +
                     numeroDocumento);
@@ -320,18 +310,12 @@ public class ImportarEgressos {
     private static boolean isNumberOnly(String string) {
         boolean validacao = true;
         validacao = string.trim().chars().allMatch(Character::isDigit);
-        /*
-        for (int i = 0; i < string.length(); i++) {
-            if (string.charAt(i) < '0' || string.charAt(i) > '9') {
-                if (string.charAt(i) != '-') {
-                    if (string.charAt(i) != '/') {
-                        validacao = false;
-                        break;
-                    }
-                }
-            }
-        }
-        */
+        return validacao;
+    }
+
+    private static boolean isAlphanumeric(String string) {
+        boolean validacao = true;
+        validacao = string.trim().chars().allMatch(Character::isLetterOrDigit);
         return validacao;
     }
 
