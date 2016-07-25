@@ -1,7 +1,7 @@
 package br.inf.ufg.sempreufg.conexao;
 
 import br.inf.ufg.sempreufg.auxiliar.ArquivoLog;
-import br.inf.ufg.sempreufg.auxiliar.Strings;
+import br.inf.ufg.sempreufg.auxiliar.Parametros;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,11 +23,11 @@ public class Conexao {
     public Conexao() {
         if (conexao == null) {
             try {
-                Class.forName(Strings.nomeClassDriverConexaoPostgres);
+                Class.forName(Parametros.nomeClassDriverConexaoPostgres);
                 conexao = DriverManager.getConnection("" +
-                                Strings.enderecoPostgres,
-                        Strings.nomeLoginPostgres,
-                        Strings.senhaLoginPostgres);
+                                Parametros.enderecoPostgres,
+                        Parametros.nomeLoginPostgres,
+                        Parametros.senhaLoginPostgres);
             } catch (ClassNotFoundException e) {
                 ArquivoLog.GravaMensagemDeErro(e.getMessage());
             } catch (SQLException e) {
@@ -63,4 +63,5 @@ public class Conexao {
         }
         return count;
     }
+
 }

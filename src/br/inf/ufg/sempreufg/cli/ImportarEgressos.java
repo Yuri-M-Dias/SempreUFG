@@ -1,12 +1,11 @@
 package br.inf.ufg.sempreufg.cli;
 
 import br.inf.ufg.sempreufg.auxiliar.ArquivoParaImportar;
+import br.inf.ufg.sempreufg.auxiliar.Parametros;
 import br.inf.ufg.sempreufg.conexao.Conexao;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,8 +21,12 @@ public class ImportarEgressos {
     private static Connection conexaoSQL = null;
 
     public static void main(String[] args) {
+        String caminho = "";
+        if (args.length > 0) {
+            caminho = args[0];
+        }
         Conexao conexao = new Conexao();
-        arquivoParaImportar = new ArquivoParaImportar();
+        arquivoParaImportar = new ArquivoParaImportar(caminho);
         List<String> arquivo = ArquivoParaImportar.GetArquivoParaImportar();
         conexaoSQL = conexao.getConexao();
         if (conexaoSQL == null) {
@@ -132,7 +135,7 @@ public class ImportarEgressos {
     }
 
     private static void inserirReg2(String registro) {
-
+        throw new NotImplementedException();
     }
 
 }

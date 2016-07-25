@@ -3,7 +3,7 @@ package br.inf.ufg.sempreufg.auxiliar;
 /**
  * Utilizadas para strings fixas da aplicação.
  */
-public class Strings {
+public class Parametros {
     public static final String enderecoPostgres =
             "jdbc:postgresql://localhost:5432/teste";
 
