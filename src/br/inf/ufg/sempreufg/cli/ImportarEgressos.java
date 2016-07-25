@@ -17,6 +17,9 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ *
+ */
 public class ImportarEgressos {
 
     private static ArquivoParaImportar arquivoParaImportar = null;
@@ -55,6 +58,8 @@ public class ImportarEgressos {
                 System.out.println("Coluna inserida: " + registro);
             }
             conexaoSQL.commit();
+            ArquivoLog.gravaMensagemSucesso("Sucesso: " + numeroEgressosInseridos
+                    + " egressos foram inseridos.");
         } catch (Exception e) {
             try {
                 conexaoSQL.rollback();
@@ -63,6 +68,8 @@ public class ImportarEgressos {
                 ArquivoLog.GravaMensagemDeErro(e1.getMessage());
             }
             ArquivoLog.GravaMensagemDeErro(e.getMessage());
+            ArquivoLog.GravaMensagemDeErro("Nenhum dado foi inserido no Banco" +
+                    " de dados devido ao erro anterior.");
             e.printStackTrace();
         } finally {
             try {
@@ -71,14 +78,15 @@ public class ImportarEgressos {
                 ArquivoLog.GravaMensagemDeErro(e.getMessage());
             }
         }
-        ArquivoLog.gravaMensagemSucesso("Sucesso: " + numeroEgressosInseridos
-                        + " egressos foram inseridos.");
     }
 
     private static void inserirReg1(String registro) throws SQLException, ParseException {
         List<String> listaCampos = Arrays.stream(registro.split("\\\\"))
                 .collect(toList());
         listaCampos.remove(0);//Elimina "Reg.1"
+        if (!validaDadosReg1(listaCampos)) {
+            throw new SQLException("Formato de dados inválido.");
+        }
         String nomeEgresso = listaCampos.get(0);
         String tipoDocumento = listaCampos.get(1);
         String numeroDocumento = listaCampos.get(2);
@@ -221,78 +229,98 @@ public class ImportarEgressos {
         }
     }
 
-    private static java.sql.Date convertStringToSQLDate(String dataNascimento) throws ParseException {
+    private static java.sql.Date convertStringToSQLDate(String data) throws ParseException {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = format.parse(dataNascimento);
+        Date date = format.parse(data);
         java.sql.Date dateSQL = new java.sql.Date(date.getTime());
         return dateSQL;
     }
 
-    private static boolean ValidaDadosReg1(List<String> registro1) {
+    private static boolean validaDadosReg1(List<String> registro1) {
         boolean validacao = true;
-
-        validacao = IsCharacterOnly(registro1.get(0));
-        if (validacao) {
-            validacao = IsNumberOnly(registro1.get(1));
+        String nomeDoEgresso = registro1.get(0);
+        if (!isCharacterOnly(nomeDoEgresso)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de nome do egresso " +
+                    "deve ter apenas letras e espaços sem caracteres especiais: " +
+                    nomeDoEgresso);
+            validacao = false;
         }
-        if (validacao) {
-            validacao = IsNumberOnly(registro1.get(2));
+        String tipoDocumento = registro1.get(1);
+        if (!isCharacterOnly(tipoDocumento)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de tipo do documento " +
+                    "deve ter apenas letras e espaços sem caracteres especiais: " +
+                    tipoDocumento);
+            validacao = false;
         }
-        if (validacao) {
-            SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
-            sdf1.setLenient(false);
-            try {
-                Date data1 = sdf1.parse(registro1.get(3));
-            } catch(ParseException e) {
-                validacao = false;
-            }
+        String numeroDocumento = registro1.get(2);
+        if (!isCharacterOnly(numeroDocumento)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de numero do documento " +
+                    "deve ter apenas letras e espaços sem caracteres especiais: " +
+                    numeroDocumento);
+            validacao = false;
         }
-        if (validacao) {
-            validacao = IsCharacterOnly(registro1.get(4));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dataNascimento = registro1.get(3);
+        try {
+            Date data = sdf.parse(dataNascimento);
+        } catch (ParseException e) {
+            ArquivoLog.GravaMensagemDeErro("Essa data deve vir no formato " +
+                    "yyyy-MM-dd : " + dataNascimento);
+            validacao = false;
         }
-        if (validacao) {
-            SimpleDateFormat sdf2 = new SimpleDateFormat("MM/yyyy");
-            sdf2.setLenient(false);
-            try {
-                Date data2 = sdf2.parse(registro1.get(5));
-            } catch(ParseException e) {
-                validacao = false;
-            }
+        String nomeCurso = registro1.get(4);
+        if (!isCharacterOnly(nomeCurso)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de nome do curso deve ter " +
+                    "apenas letras e espaços sem caracteres especiais: " +
+                    nomeCurso);
+            validacao = false;
         }
-        if (validacao) {
-            SimpleDateFormat sdf3 = new SimpleDateFormat("MM/yyyy");
-            sdf3.setLenient(false);
-            try {
-                Date data3 = sdf3.parse(registro1.get(6));
-            } catch(ParseException e) {
-                validacao = false;
-            }
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MMyyyy");
+        String dataInicio = registro1.get(5);
+        try {
+            Date data = sdf2.parse(dataInicio);
+        } catch (ParseException e) {
+            ArquivoLog.GravaMensagemDeErro("Essa data deve vir no formato " +
+                    "MMyyy : " + dataInicio);
+            validacao = false;
         }
-        if (validacao) {
-            validacao = IsNumberOnly(registro1.get(7));
+        String dataFim = registro1.get(6);
+        try {
+            Date data = sdf2.parse(registro1.get(6));
+        } catch (ParseException e) {
+            ArquivoLog.GravaMensagemDeErro("Essa data deve vir no formato " +
+                    "MMyyy : " + dataFim);
+            validacao = false;
+        }
+        String numeroMatricula = registro1.get(7);
+        if (!isNumberOnly(numeroMatricula)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de numero de matrícula deve" +
+                    " ter apenas número sem caracteres especiais: " +
+                    numeroMatricula);
+            validacao = false;
+        }
+        String descrição = registro1.get(8);
+        if (!isCharacterOnly(descrição)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de descrição deve ter " +
+                    "apenas letras e espaços sem caracteres especiais: " +
+                    descrição);
+            validacao = false;
         }
         return validacao;
     }
 
-    private static boolean IsCharacterOnly(String string) {
+    private static boolean isCharacterOnly(String string) {
         boolean validacao = true;
-        for (int i = 0; i < string.length(); i++) {
-            if (string.charAt(i) < 'a' || string.charAt(i) > 'z') {
-                if (string.charAt(i) < 'A' || string.charAt(i) > 'Z'){
-                    if (string.charAt(i) != ' ') {
-                        if (string.charAt(i) != '-') {
-                            validacao = false;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        string = string.toLowerCase();
+        string = string.replaceAll("\\s+", "");
+        validacao = string.chars().allMatch(Character::isLetter);
         return validacao;
     }
 
-    private static boolean IsNumberOnly(String string) {
+    private static boolean isNumberOnly(String string) {
         boolean validacao = true;
+        validacao = string.trim().chars().allMatch(Character::isDigit);
+        /*
         for (int i = 0; i < string.length(); i++) {
             if (string.charAt(i) < '0' || string.charAt(i) > '9') {
                 if (string.charAt(i) != '-') {
@@ -303,6 +331,7 @@ public class ImportarEgressos {
                 }
             }
         }
+        */
         return validacao;
     }
 

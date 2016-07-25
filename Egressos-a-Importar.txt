@@ -1,0 +1,3 @@
+Reg.1\Nome do Egresso\TipoDocIdentidade\NumDocIdentidade\10011979\Curso da UFG cursado pelo egresso\021999\122003\19990102\Título do TCC\
+Reg.2\TipoDocIdentidade\NumDocIdentidade\Curso da UFG cursado pelo egresso\Iniciação Científica\03032000\03122000\Título de trabalho de IC\
+Reg.2\TipoDocIdentidade\NumDocIdentidade\Curso da UFG cursado pelo egresso\Iniciação Científica\03032001\03122001\Título de outro trabalho de IC\
