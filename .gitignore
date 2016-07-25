@@ -2,7 +2,6 @@
 *.ear
 *.log
 *.class
-*.jar
 arquivo/
 .idea/
 target/

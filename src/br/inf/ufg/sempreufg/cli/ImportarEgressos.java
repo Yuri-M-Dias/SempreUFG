@@ -38,16 +38,19 @@ public class ImportarEgressos {
                     "conexão com o BD.");
             throw new SecurityException("Erro ocorreu. Detalhes no log.");
         }
+        Long numeroEgressosInseridos = 0L;
+        ArquivoLog.GravaMensagemDeErro("Começando uma nova inserção...");
         try {
             conexaoSQL.setAutoCommit(false);
             for (String registro : arquivo) {
                 if (registro.startsWith("Reg.1")) {
                     inserirReg1(registro);
+                    numeroEgressosInseridos++;
                 } else if (registro.startsWith("Reg.2")) {
                     inserirReg2(registro);
                 } else {
-                    ArquivoLog.GravaMensagemDeErro("Arquivo com formato" +
-                            "errado.");
+                    ArquivoLog.gravaMensagemSucesso("Arquivo com formato" +
+                            "errado. Linha: " + registro);
                 }
                 System.out.println("Coluna inserida: " + registro);
             }
@@ -55,6 +58,7 @@ public class ImportarEgressos {
         } catch (Exception e) {
             try {
                 conexaoSQL.rollback();
+                numeroEgressosInseridos = 0L;
             } catch (SQLException e1) {
                 ArquivoLog.GravaMensagemDeErro(e1.getMessage());
             }
@@ -67,6 +71,8 @@ public class ImportarEgressos {
                 ArquivoLog.GravaMensagemDeErro(e.getMessage());
             }
         }
+        ArquivoLog.gravaMensagemSucesso("Sucesso: " + numeroEgressosInseridos
+                        + " egressos foram inseridos.");
     }
 
     private static void inserirReg1(String registro) throws SQLException, ParseException {
@@ -105,7 +111,6 @@ public class ImportarEgressos {
         } catch (ParseException e) {
             ArquivoLog.GravaMensagemDeErro(e.getMessage());
         }
-        //Pega o id do curso da UFG...
         String nomeCursoUFG = listaCampos.get(4);
         String procuraCursoUFGSQL = "SELECT cufg_id FROM public.curso_ufg " +
                 "WHERE cufg_nome = ?";
@@ -166,7 +171,19 @@ public class ImportarEgressos {
         if (egressoId == null) {
             throw new SecurityException("Falha ao encontrar egresso.");
         }
-        String cursoUFGId = listaCampos.get(2);
+        String nomeCursoUFG = listaCampos.get(2);
+        String procuraCursoUFGSQL = "SELECT cufg_id FROM public.curso_ufg " +
+                "WHERE cufg_nome = ?";
+        Long cursoID = null;
+        try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
+                (procuraCursoUFGSQL)) {
+            preparedStatement.setString(1, nomeCursoUFG);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()) {
+                throw new SQLException("Curso não existe no BD.");
+            }
+            cursoID = resultSet.getLong("cufg_id");
+        }
         String procuraHistoricoUFGId = "SELECT hifg_id FROM public.historico_na_ufg " +
                 "WHERE egre_id = ? AND " +
                 "curs_id = ?";
@@ -174,10 +191,10 @@ public class ImportarEgressos {
         try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
                 (procuraHistoricoUFGId)) {
             preparedStatement.setLong(1, egressoId);
-            preparedStatement.setLong(2, Long.parseLong(cursoUFGId));
+            preparedStatement.setLong(2, cursoID);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
-                throw new SQLException("Egresso não cursou este curso: " + cursoUFGId);
+                throw new SQLException("Egresso não cursou este curso: " + nomeCursoUFG);
             }
             historicoId = resultSet.getLong("hifg_id");
         }
