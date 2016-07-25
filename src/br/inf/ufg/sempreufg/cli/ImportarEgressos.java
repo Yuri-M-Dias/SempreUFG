@@ -211,5 +211,83 @@ public class ImportarEgressos {
         return dateSQL;
     }
 
+    private static boolean ValidaDadosReg1(List<String> registro1) {
+        boolean validacao = true;
+
+        validacao = IsCharacterOnly(registro1.get(0));
+        if (validacao) {
+            validacao = IsNumberOnly(registro1.get(1));
+        }
+        if (validacao) {
+            validacao = IsNumberOnly(registro1.get(2));
+        }
+        if (validacao) {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+            sdf1.setLenient(false);
+            try {
+                Date data1 = sdf1.parse(registro1.get(3));
+            } catch(ParseException e) {
+                validacao = false;
+            }
+        }
+        if (validacao) {
+            validacao = IsCharacterOnly(registro1.get(4));
+        }
+        if (validacao) {
+            SimpleDateFormat sdf2 = new SimpleDateFormat("MM/yyyy");
+            sdf2.setLenient(false);
+            try {
+                Date data2 = sdf2.parse(registro1.get(5));
+            } catch(ParseException e) {
+                validacao = false;
+            }
+        }
+        if (validacao) {
+            SimpleDateFormat sdf3 = new SimpleDateFormat("MM/yyyy");
+            sdf3.setLenient(false);
+            try {
+                Date data3 = sdf3.parse(registro1.get(6));
+            } catch(ParseException e) {
+                validacao = false;
+            }
+        }
+        if (validacao) {
+            validacao = IsNumberOnly(registro1.get(7));
+        }
+        return validacao;
+    }
+
+    private static boolean IsCharacterOnly(String string) {
+        boolean validacao = true;
+        for (int i = 0; i < string.length(); i++) {
+            if (string.charAt(i) < 'a' || string.charAt(i) > 'z') {
+                if (string.charAt(i) < 'A' || string.charAt(i) > 'Z'){
+                    if (string.charAt(i) != ' ') {
+                        if (string.charAt(i) != '-') {
+                            validacao = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return validacao;
+    }
+
+    private static boolean IsNumberOnly(String string) {
+        boolean validacao = true;
+        for (int i = 0; i < string.length(); i++) {
+            if (string.charAt(i) < '0' || string.charAt(i) > '9') {
+                if (string.charAt(i) != '-') {
+                    if (string.charAt(i) != '/') {
+                        validacao = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return validacao;
+    }
+
 }
 
