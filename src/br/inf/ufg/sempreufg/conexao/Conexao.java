@@ -16,7 +16,6 @@ public class Conexao {
     private static PreparedStatement preparedStatement;
     private static Connection conexao = null;
     private static ArquivoLog arquivoLog = new ArquivoLog();
-    private static Strings strings = new Strings();
 
     /**
      * Inicia uma conexão com o banco de dados
@@ -24,23 +23,27 @@ public class Conexao {
     public Conexao() {
         if (conexao == null) {
             try {
-                Class.forName(strings.nomeClassDriverConexaoPostgres);
+                Class.forName(Strings.nomeClassDriverConexaoPostgres);
                 conexao = DriverManager.getConnection("" +
-                        strings.enderecoPostgres,
-                        strings.nomeLoginPostgres,
-                        strings.senhaLoginPostgres);
+                                Strings.enderecoPostgres,
+                        Strings.nomeLoginPostgres,
+                        Strings.senhaLoginPostgres);
             } catch (ClassNotFoundException e) {
-                arquivoLog.GravaMensagemDeErro(e.getMessage());
+                ArquivoLog.GravaMensagemDeErro(e.getMessage());
             } catch (SQLException e) {
-                arquivoLog.GravaMensagemDeErro(e.getMessage());
+                ArquivoLog.GravaMensagemDeErro(e.getMessage());
             }
         }
         createConnection();
     }
 
+    public Connection getConexao() {
+        return conexao;
+    }
+
     private static void createConnection() {
         try {
-            preparedStatement =  conexao.prepareStatement(
+            preparedStatement = conexao.prepareStatement(
                     "INSERT INTO public.area_conhecimento(" +
                             "arco_arc_id, arco_nome_area, arco_codigo_area)" +
                             "VALUES (?, ?, ?);");
@@ -49,17 +52,16 @@ public class Conexao {
         }
     }
 
-
     public static void recordBD(String recordAreaConhecimento) {
         String enter = recordAreaConhecimento;
-        enter = enter.substring(6,enter.length());
-        String[] parameters = enter.split(";",numberOfFields(enter));
+        enter = enter.substring(6, enter.length());
+        String[] parameters = enter.split(";", numberOfFields(enter));
 
         try {
             createConnection();
-            preparedStatement.setInt(1,Integer.parseInt(parameters[0]));
-            preparedStatement.setString(2,parameters[1]);
-            preparedStatement.setInt(3,Integer.parseInt(parameters[2]));
+            preparedStatement.setInt(1, Integer.parseInt(parameters[0]));
+            preparedStatement.setString(2, parameters[1]);
+            preparedStatement.setInt(3, Integer.parseInt(parameters[2]));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
