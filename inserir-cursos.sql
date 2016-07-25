@@ -1,5 +1,7 @@
 
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
+VALUES (1, 1, 'Engenharia de Software', 'Bachalerado', '2016-07-24', True, 'Integral');
+INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
 VALUES (1, 1, 'Administração', 'Bachalerado', '2016-07-24', True, 'Integral');
 INSERT INTO public.curso_ufg(uafg_id, arco_id, cufg_nome, cufg_nivel, cufg_data_criacao, cufg_presencial, curs_turno)
 VALUES (1, 1, 'Engenharia do Meio Ambiente', 'Bachalerado', '2016-07-24', True, 'Integral');

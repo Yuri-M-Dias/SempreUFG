@@ -211,36 +211,36 @@ COIE_ID		integer 	REFERENCES CURSO_OUTRA_IES NOT NULL
 );
 
 INSERT INTO public.localizacao_geografica(
-    loge_id, loge_nome_cidade, loge_nome_unidade_federativa, loge_nome_pais,
+    loge_nome_cidade, loge_nome_unidade_federativa, loge_nome_pais,
     loge_sigla_unidade_federativa, loge_longitude, loge_latitude)
-VALUES (1, 'Goiânia', 'Goiás', 'Brasil', 'GO', 22.32, 43.21);
+VALUES ('Goiânia', 'Goiás', 'Brasil', 'GO', 22.32, 43.21);
 INSERT INTO public.localizacao_geografica(
-    loge_id, loge_nome_cidade, loge_nome_unidade_federativa, loge_nome_pais,
+    loge_nome_cidade, loge_nome_unidade_federativa, loge_nome_pais,
     loge_sigla_unidade_federativa, loge_longitude, loge_latitude)
-VALUES (2, 'Brasília', 'Distrito Federal', 'Brasil', 'DF', 15.2, 45.24);
+VALUES ('Brasília', 'Distrito Federal', 'Brasil', 'DF', 15.2, 45.24);
 INSERT INTO public.localizacao_geografica(
-    loge_id, loge_nome_cidade, loge_nome_unidade_federativa, loge_nome_pais,
+    loge_nome_cidade, loge_nome_unidade_federativa, loge_nome_pais,
     loge_sigla_unidade_federativa, loge_longitude, loge_latitude)
-VALUES (3, 'Palmas', 'Tocantins', 'Brasil', 'TO', 8.2, 42.14);
+VALUES ('Palmas', 'Tocantins', 'Brasil', 'TO', 8.2, 42.14);
 
 INSERT INTO public.egresso(
-    egre_id, loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
-VALUES (1, 1, 'Fulano de Tal', 'RG', '930945', '1961-06-16', 'Privado', '1962-06-16');
+    loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
+VALUES (1, 'Fulano de Tal', 'RG', '930945', '1961-06-16', 'Privado', '1962-06-16');
 INSERT INTO public.egresso(
-    egre_id, loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
-VALUES (2, 3, 'Sicrano de Tal', 'CPF', '95218835125', '1995-06-08', 'Público', '2015-06-16');
+    loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
+VALUES (3, 'Sicrano de Tal', 'CPF', '95218835125', '1995-06-08', 'Público', '2015-06-16');
 INSERT INTO public.egresso(
-    egre_id, loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
-VALUES (3, 2, 'Beltrano de Tal', 'RG', '233132', '1992-05-08', 'Privado', '2016-02-16');
+    loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
+VALUES (2, 'Beltrano de Tal', 'RG', '233132', '1992-05-08', 'Privado', '2016-02-16');
 INSERT INTO public.egresso(
-    egre_id, loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
-VALUES (4, 2, 'Sir Beltrano de Tal', 'CPF', '92483835125', '1988-10-08', 'Público', '2016-01-02');
+    loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
+VALUES (2, 'Sir Beltrano de Tal', 'CPF', '92483835125', '1988-10-08', 'Público', '2016-01-02');
 INSERT INTO public.egresso(
-    egre_id, loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
-VALUES (5, 3, 'Lorde Sicrano', 'CPF', '95218835155', '1995-06-08', 'Público', '2015-06-16');
+    loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
+VALUES (3, 'Lorde Sicrano', 'CPF', '95218835155', '1995-06-08', 'Público', '2015-06-16');
 INSERT INTO public.egresso(
-    egre_id, loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
-VALUES (6, 1, 'Barão Sicrano de Fulanosville', 'CPF', '95213435122', '1998-06-08', 'Privado', '2016-03-24');
+    loge_id, egre_nome, egre_tipo_doc_identidade, egre_numero_doc_identidade, egre_data_nascimento, egre_visibilidade_dados, egre_data_ultima_visualizacao)
+VALUES (1, 'Barão Sicrano de Fulanosville', 'CPF', '95213435122', '1998-06-08', 'Privado', '2016-03-24');
 
 INSERT INTO public.area_conhecimento(
     arco_id, arco_nome_area, arco_codigo_area)
@@ -321,15 +321,15 @@ INSERT INTO public.historico_em_iem(
 VALUES (1, 1, 2, 022008, 122010);
 
 INSERT INTO public.historico_na_ufg(
-    hifg_id, egre_id, curs_id, hifg_mes_ano_de_inicio, hifg_mes_ano_de_fim,
+    egre_id, curs_id, hifg_mes_ano_de_inicio, hifg_mes_ano_de_fim,
     hifg_numero_matricula_curso, hifg_titulo_do_trabalho_final)
-VALUES (1, 3, 2, 122013, '122018',
+VALUES (3, 2, 122013, '122018',
     131564, 'monografia');
 
 INSERT INTO public.historico_na_ufg(
-    hifg_id, egre_id, curs_id, hifg_mes_ano_de_inicio, hifg_mes_ano_de_fim,
+    egre_id, curs_id, hifg_mes_ano_de_inicio, hifg_mes_ano_de_fim,
     hifg_numero_matricula_curso, hifg_titulo_do_trabalho_final)
-VALUES (2, 4, 3, 062014, '062018',
+VALUES (4, 3, 062014, '062018',
     142568, 'Trabalho de Persistencia');
 
 INSERT INTO public.historico_outra_ies(
@@ -361,9 +361,9 @@ INSERT INTO public.item_divulgacao_curso_ufg(
 VALUES (1, 1, 1);
 
 INSERT INTO public.realizacao_de_programa_academico(
-    rpac_id, hifg_id, rpac_tipo, rpac_data_inicio, rpac_data_fim,
+    hifg_id, rpac_tipo, rpac_data_inicio, rpac_data_fim,
     rpac_descricao)
-VALUES (1, 1, 'Iniciação Científica', '2011-01-08', '2011-12-12', 'Pesquisa sobre a influência do Virus da Dengue no cotidiano de famílias pobres no interior de Goiás.');
+VALUES (1, 'Iniciação Científica', '2011-01-08', '2011-12-12', 'Pesquisa sobre a influência do Virus da Dengue no cotidiano de famílias pobres no interior de Goiás.');
 
 INSERT INTO public.residencia(
     resi_id, egre_id, loge_id, resi_data_inicio, resi_data_fim, resi_endereco)

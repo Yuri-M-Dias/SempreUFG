@@ -2,9 +2,7 @@ package br.inf.ufg.sempreufg.cli;
 
 import br.inf.ufg.sempreufg.auxiliar.ArquivoLog;
 import br.inf.ufg.sempreufg.auxiliar.ArquivoParaImportar;
-import br.inf.ufg.sempreufg.auxiliar.Parametros;
 import br.inf.ufg.sempreufg.conexao.Conexao;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,8 +34,9 @@ public class ImportarEgressos {
         List<String> arquivo = ArquivoParaImportar.GetArquivoParaImportar();
         conexaoSQL = conexao.getConexao();
         if (conexaoSQL == null) {
-            arquivoLog.GravaMensagemDeErro("Problema ao conseguir a" +
+            ArquivoLog.GravaMensagemDeErro("Problema ao conseguir a" +
                     "conexão com o BD.");
+            throw new SecurityException("Erro ocorreu. Detalhes no log.");
         }
         try {
             conexaoSQL.setAutoCommit(false);
@@ -47,75 +46,81 @@ public class ImportarEgressos {
                 } else if (registro.startsWith("Reg.2")) {
                     inserirReg2(registro);
                 } else {
-                    arquivoLog.GravaMensagemDeErro("Arquivo com formato" +
+                    ArquivoLog.GravaMensagemDeErro("Arquivo com formato" +
                             "errado.");
                 }
+                System.out.println("Coluna inserida: " + registro);
             }
             conexaoSQL.commit();
         } catch (Exception e) {
             try {
                 conexaoSQL.rollback();
             } catch (SQLException e1) {
-                arquivoLog.GravaMensagemDeErro(e1.getMessage());
+                ArquivoLog.GravaMensagemDeErro(e1.getMessage());
             }
-            arquivoLog.GravaMensagemDeErro(e.getMessage());
+            ArquivoLog.GravaMensagemDeErro(e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 conexaoSQL.close();
             } catch (SQLException e) {
-                arquivoLog.GravaMensagemDeErro(e.getMessage());
+                ArquivoLog.GravaMensagemDeErro(e.getMessage());
             }
         }
     }
 
     private static void inserirReg1(String registro) throws SQLException, ParseException {
-        List<String> listaCampos = Arrays.stream(registro.split("\\\\")).collect(toList());
+        List<String> listaCampos = Arrays.stream(registro.split("\\\\"))
+                .collect(toList());
         listaCampos.remove(0);//Elimina "Reg.1"
         String nomeEgresso = listaCampos.get(0);
         String tipoDocumento = listaCampos.get(1);
         String numeroDocumento = listaCampos.get(2);
         String dataNascimento = listaCampos.get(3);
         //Falta localização nos dados, usando a primeira.
-        String inserirEgressoSQL = "INSERT INTO public.egresso(egre_nome, " +
-                "egre_tipo_doc_identidade, egre_numero_doc_identidade," +
+        String inserirEgressoSQL = "INSERT INTO public.egresso(loge_id, " +
+                "egre_nome, " + "egre_tipo_doc_identidade, " +
+                "egre_numero_doc_identidade," +
                 " egre_data_nascimento, egre_visibilidade_dados) " +
-                "VALUES (?, ?, ?, ?, 'Privado')";
+                "VALUES (1, ?, ?, ?, ?, 'Privado')";
+        Long egressoId = null;
         try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
-                (inserirEgressoSQL)) {
+                (inserirEgressoSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, nomeEgresso);
             preparedStatement.setString(2, tipoDocumento);
             preparedStatement.setString(3, numeroDocumento);
             java.sql.Date dateSQL = convertStringToSQLDate(dataNascimento);
             preparedStatement.setDate(4, dateSQL);
-            preparedStatement.executeUpdate();
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Não consegui criar o usuário.");
+            }
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    egressoId = generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Não consegui criar o usuário.");
+                }
+            }
         } catch (ParseException e) {
-            arquivoLog.GravaMensagemDeErro(e.getMessage());
+            ArquivoLog.GravaMensagemDeErro(e.getMessage());
         }
         //Pega o id do curso da UFG...
         String nomeCursoUFG = listaCampos.get(4);
         String procuraCursoUFGSQL = "SELECT cufg_id FROM public.curso_ufg " +
-                "WHERE nome = ?";
-        String cursoID = null;
+                "WHERE cufg_nome = ?";
+        Long cursoID = null;
         try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
                 (procuraCursoUFGSQL)) {
             preparedStatement.setString(1, nomeCursoUFG);
             ResultSet resultSet = preparedStatement.executeQuery();
-            cursoID = resultSet.getString(1);
+            if (!resultSet.next()) {
+                throw new SQLException("Curso não existe no BD.");
+            }
+            cursoID = resultSet.getLong("cufg_id");
         }
         if (cursoID == null) {
-            arquivoLog.GravaMensagemDeErro("Curso não existe no BD!");
-        }
-        String procuraEgressoSQL = "SELECT egre_id FROM public.egresso " +
-                "WHERE egre_nome = ?";
-        String egressoId = null;
-        try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
-                (procuraEgressoSQL)) {
-            preparedStatement.setString(1, nomeEgresso);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            egressoId = resultSet.getString(1);
-        }
-        if (egressoId == null) {
-            arquivoLog.GravaMensagemDeErro("Falha ao inserir egresso.");
+            ArquivoLog.GravaMensagemDeErro("Curso não existe no BD!");
         }
         String mesAnoInicio = listaCampos.get(5);
         String mesAnoFim = listaCampos.get(6);
@@ -128,8 +133,8 @@ public class ImportarEgressos {
                 "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
                 (inserirHistoricoUfgSQL)) {
-            preparedStatement.setInt(1, Integer.valueOf(egressoId));
-            preparedStatement.setInt(2, Integer.valueOf(cursoID));
+            preparedStatement.setLong(1, egressoId);
+            preparedStatement.setLong(2, cursoID);
             preparedStatement.setInt(3, Integer.valueOf(mesAnoInicio));
             preparedStatement.setInt(4, Integer.valueOf(mesAnoFim));
             preparedStatement.setInt(5, Integer.valueOf(numeroMatriculaCurso));
@@ -139,20 +144,24 @@ public class ImportarEgressos {
     }
 
     private static void inserirReg2(String registro) throws SQLException, ParseException {
-        List<String> listaCampos = Arrays.stream(registro.split("\\")).collect(toList());
+        List<String> listaCampos = Arrays.stream(registro.split("\\\\"))
+                .collect(toList());
         listaCampos.remove(0);//Elimina "Reg.2"
         String tipoDocumento = listaCampos.get(0);
         String numeroDocumento = listaCampos.get(1);
         String procuraEgressoSQL = "SELECT egre_id FROM public.egresso " +
                 "WHERE egre_tipo_doc_identidade = ? AND " +
                 "egre_numero_doc_identidade = ?";
-        String egressoId = null;
+        Long egressoId = null;
         try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
                 (procuraEgressoSQL)) {
             preparedStatement.setString(1, tipoDocumento);
             preparedStatement.setString(2, numeroDocumento);
             ResultSet resultSet = preparedStatement.executeQuery();
-            egressoId = resultSet.getString(1);
+            if (!resultSet.next()) {
+                throw new SQLException("Egresso não existe no BD.");
+            }
+            egressoId = resultSet.getLong("egre_id");
         }
         if (egressoId == null) {
             throw new SecurityException("Falha ao encontrar egresso.");
@@ -161,13 +170,16 @@ public class ImportarEgressos {
         String procuraHistoricoUFGId = "SELECT hifg_id FROM public.historico_na_ufg " +
                 "WHERE egre_id = ? AND " +
                 "curs_id = ?";
-        String historicoId = null;
+        Long historicoId = null;
         try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
                 (procuraHistoricoUFGId)) {
-            preparedStatement.setInt(1, Integer.parseInt(egressoId));
-            preparedStatement.setInt(2, Integer.parseInt(cursoUFGId));
+            preparedStatement.setLong(1, egressoId);
+            preparedStatement.setLong(2, Long.parseLong(cursoUFGId));
             ResultSet resultSet = preparedStatement.executeQuery();
-            historicoId = resultSet.getString(1);
+            if (!resultSet.next()) {
+                throw new SQLException("Egresso não cursou este curso: " + cursoUFGId);
+            }
+            historicoId = resultSet.getLong("hifg_id");
         }
         if (historicoId == null) {
             throw new SecurityException("Esse egresso não cursou este curso " +
@@ -180,10 +192,10 @@ public class ImportarEgressos {
         String inserirRealizacaoSQL = "INSERT INTO public.realizacao_de_programa_academico(" +
                 "hifg_id, rpac_tipo, rpac_data_inicio, " +
                 "rpac_data_fim, rpac_descricao) " +
-                "VALUES (?, ?, ?, ?, ?)";
+                "VALUES (?, ?::t_programa_academico, ?, ?, ?)";
         try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
                 (inserirRealizacaoSQL)) {
-            preparedStatement.setInt(1, Integer.valueOf(historicoId));
+            preparedStatement.setLong(1, historicoId);
             preparedStatement.setString(2, tipoRealizacao);
             preparedStatement.setDate(3, convertStringToSQLDate(dataInicio));
             preparedStatement.setDate(4, convertStringToSQLDate(dataFim));

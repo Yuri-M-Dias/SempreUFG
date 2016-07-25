@@ -15,20 +15,19 @@ public class ArquivoParaImportar {
     public ArquivoParaImportar(String caminhoArquivo) {
         BufferedReader bufferedReader = readFileTXT(caminhoArquivo);
         if (bufferedReader == null) {
-            arquivoLog.GravaMensagemDeErro("Erro na abertura do arquivo de Log.");
+            ArquivoLog.GravaMensagemDeErro("Erro na abertura do arquivo de Log.");
+            throw new SecurityException("Comportamento inesperado. Acesse os " +
+                    "arquivos de log para mais detalhes.");
         }
         try {
             String line = bufferedReader.readLine();
             while (line != null) {
                 arquivo.add(line);
                 line = bufferedReader.readLine();
-                try {
-                    arquivo.add(line);
-                } catch (NullPointerException e) {
-                }
             }
         } catch (IOException e) {
             ArquivoLog.GravaMensagemDeErro(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -52,6 +51,7 @@ public class ArquivoParaImportar {
             return bufferedReader;
         } catch (FileNotFoundException e) {
             ArquivoLog.GravaMensagemDeErro(e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
