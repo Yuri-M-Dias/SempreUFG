@@ -1,5 +1,5 @@
 Reg.1\Um nome\RG\34242\1992-19-03\Engenharia da Computação\061999\072003\051123\Aprendizado de Máquina na Cloud: uma proposta do futuro\
 Reg.1\Um outro nome\RG\32242\1992-19-03\Engenharia de Software\061999\072003\051121\Aprendizado de Máquina na Cloud: uma proposta do presente\
 Reg.1\Um terceiro nome\RG\34142\1992-19-03\Engenharia de Software\061999\072003\951123\Aprendizado de Máquina na Cloud: uma proposta do passado\
-Reg.2\RG\34242\2\Monitoria\2016-01-10\2017-02-11\Monitoria em Sistemas Operacionais\
+Reg.2\RG\34242\Engenharia da Computação\Monitoria\2016-01-10\2017-02-11\Monitoria em Sistemas Operacionais\
 

@@ -30,6 +30,12 @@ public class ArquivoLog {
         FinalizaLog();
     }
 
+    public static void gravaMensagemSucesso(String mensagem){
+        AbreLog();
+        printWriter.println(mensagem);
+        FinalizaLog();
+    }
+
     public static void GravaDadoInconsistente(String dado) {
         AbreLog();
         printWriter.println("Dado " + dado + " inconsistente");
