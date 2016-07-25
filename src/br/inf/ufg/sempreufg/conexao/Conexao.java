@@ -36,32 +36,11 @@ public class Conexao {
         }
     }
 
+    /**
+     * Retorna a conexão com o BD.
+     * @return conexão com o BD.
+     */
     public Connection getConexao() {
         return conexao;
     }
-
-    public static void recordBD(String recordAreaConhecimento) {
-        String enter = recordAreaConhecimento;
-        enter = enter.substring(6, enter.length());
-        String[] parameters = enter.split(";", numberOfFields(enter));
-        try {
-            preparedStatement.setInt(1, Integer.parseInt(parameters[0]));
-            preparedStatement.setString(2, parameters[1]);
-            preparedStatement.setInt(3, Integer.parseInt(parameters[2]));
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static int numberOfFields(String string) {
-        int count = 1;
-        for (int i = 0; i < string.length(); i++) {
-            if (string.charAt(i) == ';') {
-                count++;
-            }
-        }
-        return count;
-    }
-
 }

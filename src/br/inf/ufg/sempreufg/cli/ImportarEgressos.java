@@ -2,6 +2,7 @@ package br.inf.ufg.sempreufg.cli;
 
 import br.inf.ufg.sempreufg.auxiliar.ArquivoLog;
 import br.inf.ufg.sempreufg.auxiliar.ArquivoParaImportar;
+import br.inf.ufg.sempreufg.auxiliar.Parametros;
 import br.inf.ufg.sempreufg.conexao.Conexao;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -31,7 +32,7 @@ public class ImportarEgressos {
         }
         arquivoLog = new ArquivoLog();
         Conexao conexao = new Conexao();
-        arquivoParaImportar = new ArquivoParaImportar(args[0]);
+        arquivoParaImportar = new ArquivoParaImportar(caminho);
         List<String> arquivo = ArquivoParaImportar.GetArquivoParaImportar();
         conexaoSQL = conexao.getConexao();
         if (conexaoSQL == null) {
@@ -68,17 +69,17 @@ public class ImportarEgressos {
     }
 
     private static void inserirReg1(String registro) throws SQLException, ParseException {
-        List<String> listaCampos = Arrays.stream(registro.split("\\")).collect(toList());
+        List<String> listaCampos = Arrays.stream(registro.split("\\\\")).collect(toList());
         listaCampos.remove(0);//Elimina "Reg.1"
         String nomeEgresso = listaCampos.get(0);
         String tipoDocumento = listaCampos.get(1);
         String numeroDocumento = listaCampos.get(2);
         String dataNascimento = listaCampos.get(3);
         //Falta localização nos dados, usando a primeira.
-        String inserirEgressoSQL = "INSERT INTO public.egresso(loge_id, egre_nome, " +
+        String inserirEgressoSQL = "INSERT INTO public.egresso(egre_nome, " +
                 "egre_tipo_doc_identidade, egre_numero_doc_identidade," +
                 " egre_data_nascimento, egre_visibilidade_dados) " +
-                "VALUES (1, ?, ?, ?, ?, 'Privado')";
+                "VALUES (?, ?, ?, ?, 'Privado')";
         try (PreparedStatement preparedStatement = conexaoSQL.prepareStatement
                 (inserirEgressoSQL)) {
             preparedStatement.setString(1, nomeEgresso);
@@ -102,7 +103,7 @@ public class ImportarEgressos {
             cursoID = resultSet.getString(1);
         }
         if (cursoID == null) {
-            throw new SecurityException("Curso não existe no BD!");
+            arquivoLog.GravaMensagemDeErro("Curso não existe no BD!");
         }
         String procuraEgressoSQL = "SELECT egre_id FROM public.egresso " +
                 "WHERE egre_nome = ?";
