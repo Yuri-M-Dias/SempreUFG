@@ -1,7 +1,5 @@
 package br.inf.ufg.sempreufg.auxiliar;
 
-import sun.print.PrinterJobWrapper;
-
 import java.io.*;
 
 /**
@@ -13,7 +11,7 @@ public class ArquivoLog {
 
     private static void AbreLog() {
         try {
-            FileWriter fileWriter = new FileWriter(Strings.nomeArquivoLog,true);
+            FileWriter fileWriter = new FileWriter(Parametros.nomeArquivoLog,true);
             printWriter = new PrintWriter(fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
