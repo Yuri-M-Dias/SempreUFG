@@ -1,6 +1,8 @@
-﻿\timing
+﻿/* Use essas linhas caso esteja executando da linha de comando(psql)
+\timing
 \set VERBOSITY verbose
 \c teste
+*/
 
 CREATE TYPE t_visibilidade_dados AS ENUM  ('Público','Privado', 'Somente Egressos');
 

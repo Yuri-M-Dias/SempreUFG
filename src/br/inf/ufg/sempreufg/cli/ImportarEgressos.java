@@ -52,7 +52,7 @@ public class ImportarEgressos {
                 } else if (registro.startsWith("Reg.2")) {
                     inserirReg2(registro);
                 } else {
-                    ArquivoLog.gravaMensagemSucesso("Arquivo com formato" +
+                    ArquivoLog.gravaMensagemSucesso("Arquivo com formato " +
                             "errado. Linha: " + registro);
                 }
                 System.out.println("Coluna inserida: " + registro);
@@ -68,7 +68,7 @@ public class ImportarEgressos {
                 ArquivoLog.GravaMensagemDeErro(e1.getMessage());
             }
             ArquivoLog.GravaMensagemDeErro(e.getMessage());
-            ArquivoLog.GravaMensagemDeErro("Nenhum dado foi inserido no Banco" +
+            ArquivoLog.GravaMensagemDeErro("Nenhum dado foi inserido no banco" +
                     " de dados devido ao erro anterior.");
             e.printStackTrace();
         } finally {
@@ -157,6 +157,9 @@ public class ImportarEgressos {
         List<String> listaCampos = Arrays.stream(registro.split("\\\\"))
                 .collect(toList());
         listaCampos.remove(0);//Elimina "Reg.2"
+        if (!validaDadosReg2(listaCampos)) {
+            throw new SQLException("Formato de dados inválido.");
+        }
         String tipoDocumento = listaCampos.get(0);
         String numeroDocumento = listaCampos.get(1);
         String procuraEgressoSQL = "SELECT egre_id FROM public.egresso " +
@@ -226,6 +229,21 @@ public class ImportarEgressos {
         return dateSQL;
     }
 
+    private static boolean isDate(String data) {
+        Date date;
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            date = simpleDateFormat.parse(data);
+            if (!data.equals(simpleDateFormat.format(date))) {
+                date = null;
+            }
+        } catch (ParseException e) {
+            return false;
+        }
+
+        return date != null;
+    }
+
     private static boolean validaDadosReg1(List<String> registro1) {
         boolean validacao = true;
         String nomeDoEgresso = registro1.get(0);
@@ -290,6 +308,63 @@ public class ImportarEgressos {
             validacao = false;
         }
         String descrição = registro1.get(8);
+        if (!isCharacterOnly(descrição)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de descrição deve ter " +
+                    "apenas letras e espaços sem caracteres especiais: " +
+                    descrição);
+            validacao = false;
+        }
+        return validacao;
+    }
+
+    private static boolean validaDadosReg2 (List<String> registro1) {
+        boolean validacao = true;
+        String tipoDocumento = registro1.get(0);
+        if (!isCharacterOnly(tipoDocumento)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de tipo do documento " +
+                    "deve ter apenas letras e espaços sem caracteres especiais: " +
+                    tipoDocumento);
+            validacao = false;
+        }
+        String numeroDocumento = registro1.get(1);
+        if (!isAlphanumeric(numeroDocumento)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de numero do documento " +
+                    "deve ter apenas letras, números e espaços sem caracteres" +
+                    " especiais: " + numeroDocumento);
+            validacao = false;
+        }
+        String identificadorCurso = registro1.get(2);
+        if (!isCharacterOnly(identificadorCurso)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de identificador do curso " +
+                    "deve ter apenas letras e espaços sem caracteres" +
+                    " especiais: " + identificadorCurso);
+            validacao = false;
+        }
+        String tipoRealizacao = registro1.get(3);
+        if (!isCharacterOnly(tipoRealizacao)) {
+            ArquivoLog.GravaMensagemDeErro("Campo de tipo de realização " +
+                    "deve ter apenas letras e espaços sem caracteres especiais: " +
+                    tipoRealizacao);
+            validacao = false;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dataDeInicio = registro1.get(4);
+        try {
+            Date data = sdf.parse(dataDeInicio);
+        } catch (ParseException e) {
+            ArquivoLog.GravaMensagemDeErro("Data de início deve vir no " +
+                    "formato yyyy-MM-dd : " + dataDeInicio);
+            validacao = false;
+        }
+        String dataDeFim = registro1.get(5);
+        try {
+            Date data = sdf.parse(dataDeFim);
+        } catch (ParseException e) {
+            ArquivoLog.GravaMensagemDeErro("Data de Fim deve vir no " +
+                    "formato yyyy-MM-dd : " + dataDeInicio);
+            validacao = false;
+        }
+        String descrição = registro1.get(6);
         if (!isCharacterOnly(descrição)) {
             ArquivoLog.GravaMensagemDeErro("Campo de descrição deve ter " +
                     "apenas letras e espaços sem caracteres especiais: " +
