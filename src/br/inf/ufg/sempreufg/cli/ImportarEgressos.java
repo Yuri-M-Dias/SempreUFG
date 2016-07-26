@@ -18,7 +18,18 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * Autores: Marcos Vinicius Ribeiro Silva, Matheus Cardoso Duarte Santos e
+ * Yuri Matheus Dias Pereira.
  *
+ * Como rodar esse projeto:
+ * AVISO: OS SCRIPTS DELETAM OS BANCOS E USUÁRIOS DO MESMO NOME!
+ * Execute os scripts create-user-and-db.sql e generate-database.sql para
+ * criar o banco de dados e inserir os primeiros dados nele.
+ * Depois, execute inserir-cursos.sql para inserir o básico dos cursos, um
+ * passo opcional.
+ *
+ * Depois, apenas execute o java -jar sempreufg-0.0.1.jar
+ * Passando os parâmetros opcionais.
  */
 public class ImportarEgressos {
 
